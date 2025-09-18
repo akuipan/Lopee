@@ -1,162 +1,104 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hati Animasi</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #fff;
-            margin: 0;
-            overflow: hidden;
-            flex-direction: column;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
-
-        .heart-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .heart {
-            width: 20px;
-            height: 20px;
-            margin: 2px;
-            background-color: #e20000;
-            position: relative;
-            transform: scale(0);
-            opacity: 0;
-            animation: heart-grow 0.5s forwards;
-            animation-delay: var(--delay);
-            clip-path: polygon(50% 100%, 0% 40%, 0% 0%, 50% 0%, 100% 0%, 100% 40%);
-        }
-
-        .heart::before,
-        .heart::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: inherit;
-            border-radius: 50%;
-            top: -50%;
-        }
-
-        .heart::before {
-            left: -50%;
-        }
-
-        .heart::after {
-            right: -50%;
-        }
-
-        @keyframes heart-grow {
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .text {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #e20000;
-            opacity: 0;
-            animation: text-fade-in 1s forwards;
-            animation-delay: 3s;
-            margin-top: 20px;
-        }
-
-        @keyframes text-fade-in {
-            to {
-                opacity: 1;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galaxy with Zoom Effect</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+        "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.152.2/examples/jsm/controls/OrbitControls.js",
+        "three/examples/jsm/loaders/FontLoader.js": "https://unpkg.com/three@0.152.2/examples/jsm/loaders/FontLoader.js",
+        "three/examples/jsm/geometries/TextGeometry.js": "https://unpkg.com/three@0.152.2/examples/jsm/geometries/TextGeometry.js"
+      }
+    }
+  </script>
+  <style>
+    #player {
+      display: none;
+    }
+    #musicButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background-color: #ffffff10;
+      color: white;
+      border: 1px solid white;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 9999;
+      font-weight: bold;
+      backdrop-filter: blur(5px);
+    }
+    #musicButton:hover {
+      background-color: #ffffff30;
+    }
+  </style>
 </head>
+
 <body>
+  <div id="container"></div>
 
-    <div class="container">
-        <div class="heart-container" id="heart-container"></div>
+  <div id="landscape-warning">
+    <div class="warning-content">
+      <div class="rotate-icon"></div>
+      <h1>Stellar Bloom</h1>
+      <h1>Tinh Cầu</h1>
+      <div class="stars-bg"></div>
     </div>
-    <div class="text" id="text"></div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('heart-container');
-            const textElement = document.getElementById('text');
-            const text = "I Love You";
+  <div id="dark-overlay"></div>
+  <div id="info"></div>
+<h1 style="position: fixed; bottom: 10px; right: 10px; font-size: 18px; font-family: Arial, sans-serif; color: white; background: rgba(0, 0, 0, 0.4); padding: 6px 12px; border-radius: 8px; z-index: 9999;">
+  Create by Miko
+</h1>
+  <button id="musicButton" disabled>Mainkan Musik 🎵</button>
+  <div id="player"></div>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player;
+     const startTime = 227;
+    const endTime = 261;
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: 'd4OMqGKBl6E',
+        playerVars: {
+          autoplay: 0,
+          start: startTime,
+          end: endTime,
+          controls: 0,
+          loop: 1,
+          playlist: 'd4OMqGKBl6E'
+        },
+        events: {
+          onReady: () => {
+            const btn = document.getElementById('musicButton');
+            btn.disabled = false;
+            btn.innerText = "Mainkan Musik 🎵";
+          },
+          onStateChange: (event) => {
+            if (event.data === YT.PlayerState.ENDED) {
+              player.seekTo(90);
+            }
+          }
+        }
+      });
+    };
 
-            // Pola hati
-            const heartPattern = [
-                "  xx  xx  ",
-                " xxxxxxxxxx ",
-                " xxxxxxxxxxx",
-                "xxxxxxxxxxxxx",
-                "xxxxxxxxxxxxx",
-                "xxxxxxxxxxxxx",
-                " xxxxxxxxxxx ",
-                "  xxxxxxxxx  ",
-                "   xxxxxxx   ",
-                "    xxxxx    ",
-                "     xxx     ",
-                "      x      "
-            ];
+    document.getElementById('musicButton').addEventListener('click', () => {
+      if (player) {
+        player.playVideo();
+        document.getElementById('musicButton').style.display = 'none';
+      }
+    });
+  </script>
 
-            let heartCount = 0;
-            const hearts = [];
-            const createHearts = () => {
-                let delay = 0;
-                heartPattern.forEach(row => {
-                    row.split('').forEach(char => {
-                        if (char === 'x') {
-                            const heart = document.createElement('div');
-                            heart.className = 'heart';
-                            heart.style.setProperty('--delay', `${delay}s`);
-                            container.appendChild(heart);
-                            hearts.push(heart);
-                            delay += 0.01;
-                        }
-                    });
-                });
-            };
-
-            const animateText = () => {
-                let charDelay = 3.5;
-                text.split('').forEach(char => {
-                    const span = document.createElement('span');
-                    span.textContent = char;
-                    span.style.opacity = '0';
-                    span.style.transition = 'opacity 0.5s ease-in-out';
-                    textElement.appendChild(span);
-
-                    setTimeout(() => {
-                        span.style.opacity = '1';
-                    }, charDelay * 1000);
-                    charDelay += 0.2;
-                });
-            };
-
-            createHearts();
-            animateText();
-        });
-    </script>
-
+  <script type="module" src="script.js"></script>
 </body>
 </html>
