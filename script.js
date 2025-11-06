@@ -587,10 +587,10 @@ scene.add(planet);
 
 //Ganti Deskripsi Planet
 const ringTexts = [
-  'Galaxy of love From Sabila',//untuk deskripsi planet layer 1
-  "Lopyuu",//untuk deskripsi planet layer 2
-  "♡Makasii yaa uda hadir di idupkuu♡",//untuk deskripsi planet layer 3
-  "sekali lagii lopyuu mwwahh",//untuk deskripsi planet layer 4
+  'Galaxy of love From mba umi',//untuk deskripsi planet layer 1
+  "semangat ngejalanin idup",//untuk deskripsi planet layer 2
+  "ty beban ml, udah jadi beban",//untuk deskripsi planet layer 3
+  "sekali lagii tengkyu",//untuk deskripsi planet layer 4
   ...(window.dataCCD && window.dataCCD.data.ringTexts ? window.dataCCD.data.ringTexts : [])
 ];
 
@@ -1067,7 +1067,7 @@ function createHintText() {
   canvas.width = canvas.height = canvasSize;
   const context = canvas.getContext('2d');
   const fontSize = 50;
-  const text = 'hii sabila';
+  const text = 'hii mba umi';
   context.font = `bold ${fontSize}px Arial, sans-serif`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
